@@ -9,10 +9,10 @@ time = np.arange(0, 0.1, step = 0.0005)
 noise = np.random.normal(0, 1, len(time))
 snr = [0.1, 1, 10, 100]
 
-for phi in phases:
+for x, phi in enumerate(phases):
     i = 1
     fig, axs = plt.subplots(len(snr) + 1)
-    fig.suptitle("Semnal sinusoidal cu faza " + phases_strings[i] )
+    fig.suptitle("Semnal sinusoidal cu faza " + phases_strings[x] )
     sinus = np.sin(120 * np.pi * time + phi)
     axs[0].set_title("Semnal curat")
     axs[0].plot(time, sinus)
