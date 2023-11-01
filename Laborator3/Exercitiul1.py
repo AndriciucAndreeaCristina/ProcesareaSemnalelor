@@ -38,6 +38,16 @@ matrix = np.array(matrix)
 matrix_h = np.conj(matrix.T)
 result = np.dot(matrix_h, matrix)
 if np.allclose(result, np.identity(N)):
-    print("The Fourier matrix is orthogonal.")
+    print("The Fourier matrix is orthogonal (np.allclose).")
 else:
-    print("The Fourier matrix is not orthogonal.")
+    print("The Fourier matrix is not orthogonal (np.allclose).")
+
+identity = np.identity(matrix.shape[0])
+difference_norm = np.linalg.norm(result - identity)
+tolerance = 1e-10
+is_unitary = difference_norm < tolerance
+
+if is_unitary:
+    print("The Fourier matrix is orthogonal (np.linalg.norm).")
+else:
+    print("The Fourier matrix is not orthogonal (np.linalg.norm).")
