@@ -1,7 +1,5 @@
-
 import matplotlib.pyplot as plt
 import numpy as np
-import math
 
 fs1 = 2
 fs2 = 5
@@ -23,7 +21,7 @@ axs[0].grid()
 
 omega = [i for i in range(0, 12)]
 for i in range(len(omega)):
-    function = [xn * (np.exp(-2*np.pi*1j*omega[i] *k/N)) for k,xn in enumerate(signal)]
+    function = [xn * (np.exp(-2 * np.pi * 1j * omega[i] * k / N)) for k, xn in enumerate(signal)]
     axs[1].stem(omega[i], abs(np.sum(function)))
 
 axs[1].set_xlabel('Frequency (ω)')
