@@ -1,26 +1,40 @@
 import numpy as np
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 
-fs = 200
-time = 0.1
-total_samples = int(0.1 * fs)
-time = np.linspace(0, 0.1, total_samples)
-time_2 = np.linspace(0, 0.1, 1000)
-frequency = 400
-signal_1 = np.sin(2 * np.pi * frequency * time)
+# Parametrii semnalului inițial
+f0 = 5  # Frecvența semnalului inițial
 
-fig, axs = plt.subplots(3, 1)
-axs[0].stem(time, signal_1)
-axs[0].plot(time, signal_1, color='blue')
-axs[0].grid(True)
+# Interval de timp și frecvență de eșantionare
+T = 1.0  # Durata semnalului
+fs = 20  # Frecvența de eșantionare
+no_samples = int(fs * T)
+# Generăm intervalul de timp
+t = np.linspace(0, T, no_samples, endpoint=False)
+t_desen = np.linspace(0, T, 1000, endpoint=False)
 
-signal_2 = np.sin(2 * np.pi * (frequency ) * time)
-axs[1].stem(time, signal_2)
-axs[1].plot(time, signal_2, color='blue')
-axs[1].grid(True)
+# Semnalul sinusoidal inițial
+x = np.sin(2 * np.pi * f0 * t)
+x_desen = np.sin(2 * np.pi * f0 * t_desen)
 
-signal_3 = np.sin(2 * np.pi * (frequency + fs) * time)
-axs[2].stem(time, signal_3)
-axs[2].plot(time, signal_3, color='blue')
-axs[2].grid(True)
+# Frecvențe pentru semnalele amestecate
+f1 = 25  # Frecvența semnalului 1
+f2 = 45  # Frecvența semnalului 2
+
+# Semnalele sinusoidale cu frecvențele f1 și f2
+x1 = np.sin(2 * np.pi * f1 * t)
+x1_desen = np.sin(2 * np.pi * f1 * t_desen)
+x2 = np.sin(2 * np.pi * f2 * t)
+x2_desen = np.sin(2 * np.pi * f2 * t_desen)
+
+# Afișăm semnalele
+fig, axs = plt.subplots(3, 1, figsize=(12, 6))
+axs[0].plot(t_desen, x_desen, color='green')
+axs[0].stem(t, x, 'b')
+axs[1].plot(t_desen, x1_desen, color='green')
+axs[1].stem(t, x1, 'b')
+axs[2].plot(t_desen, x2_desen, color='green')
+axs[2].stem(t, x2, 'b')
+plt.tight_layout()
+plt.savefig("L4_2.pdf", format="pdf", bbox_inches="tight")
+plt.savefig("L4_2.png", format="png", bbox_inches="tight")
 plt.show()

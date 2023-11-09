@@ -1,0 +1,4 @@
+Pentru a evita pierderea de informații în timpul eșantionării semnalului unui contrabas, trebuie să respectăm teorema Nyquist-Shannon.
+Frecvența de eșantionare trebuie să fie de cel puțin de două ori mai mare decât frecvența maximă a semnalului.
+Cum frecvența maximă a unui contrabas este de 200 Hz, frecvența de eșantionare trebuie să fie de cel puțin 400 Hz pentru
+a evita fenomenul de aliasing.
