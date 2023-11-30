@@ -1,7 +1,6 @@
 from scipy import misc, ndimage
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import stats
 
 X = misc.face(gray=True)
 X_fft = np.fft.fft2(X)
