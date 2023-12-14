@@ -67,37 +67,71 @@ plt.savefig("L8_1b.png", format="png", bbox_inches="tight")
 plt.show()
 
 # c
-import pandas as pd
-import pandas.plotting
-dataframe = pd.DataFrame(signal)
-lag = pandas.plotting.lag_plot(dataframe)
-lag.set_title('Lag Plot')
-lag.set_xlabel('x(t)')
-lag.set_ylabel('x(t + lag)')
-lag.grid()
+p = 2
+data = signal
+mean = np.mean(data)
+std_dev = np.std(data)
+data_standardized = (data - mean) / std_dev
+
+X = np.zeros((len(data) - p, p))
+Y = data_standardized[p:]
+
+for i in range(len(data) - p):
+    X[i] = data_standardized[i:i+p]
+
+coefficients = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(Y)
+
+predictions = []
+for i in range(p, len(data)):
+    pred = np.dot(data_standardized[i-p:i], coefficients)
+    predictions.append(pred * std_dev + mean)
+
+print("Coeficienții AR:", coefficients)
+plt.plot(time[p:], predictions)
+plt.plot(time[p:], signal[p:])
+plt.title('AR')
+plt.grid()
+plt.savefig("L8_1c.pdf", format="pdf", bbox_inches="tight")
+plt.savefig("L8_1c.png", format="png", bbox_inches="tight")
 plt.show()
 
-dataframe = concat([dataframe.shift(1), dataframe], axis=1)
-dataframe.columns = ['t-1', 't']
-result = dataframe.corr()
-print(result)
+# d
+from statsmodels.tsa.ar_model import AutoReg
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import TimeSeriesSplit
+import numpy as np
+data = signal
+train_size = int(len(data) * 0.7)
+train_data, test_data = data[:train_size], data[train_size:]
+horizon = 1
+max_lags = 50
 
-X = dataframe.values
-train, test = X[1:int(len(X)*0.9)], X[int(len(X)*0.9):]
-# print("Train: ", train)
-# print("Test: ", test)
-train_X, train_y = train[:,0], train[:,1]
-test_X, test_y = test[:,0], test[:,1]
+best_mse = np.inf
+best_p = None
 
-def model_persistence(x):
-	return x
+for p in range(1, max_lags + 1):
+    model = AutoReg(train_data, lags=p)
+    model_fit = model.fit()
+    predictions = model_fit.predict(start=len(train_data), end=len(train_data) + len(test_data) - 1)
+    mse = mean_squared_error(test_data, predictions)
+    if mse < best_mse:
+        best_mse = mse
+        best_p = p
 
-pred = []
-for x in test_X:
-    yhat = model_persistence(x)
-    pred.append(x)
-test_score = mean_squared_error(test_y, pred)
-print('Test MSE: %.3f' % test_score)
-plt.plot(test_y)
-plt.plot(pred, color='red')
+final_model = AutoReg(train_data, lags=best_p)
+final_model_fit = final_model.fit()
+test_predictions = final_model_fit.predict(start=len(train_data), end=len(train_data) + len(test_data) - 1)
+
+test_mse = mean_squared_error(test_data, test_predictions)
+print(f"Cel mai bun p: {best_p}")
+print(f"Eroarea medie pătratică pe setul de testare: {test_mse}")
+
+plt.plot(np.arange(len(data)), data, label='Date originale')
+plt.plot(np.arange(len(train_data), len(data)), test_predictions, label='Predicții', color='red')
+plt.legend()
+plt.xlabel('Timp')
+plt.ylabel('Valoare')
+plt.title('Predicții cu modelul AR')
+plt.savefig("L8_1d.pdf", format="pdf", bbox_inches="tight")
+plt.savefig("L8_1d.png", format="png", bbox_inches="tight")
 plt.show()
