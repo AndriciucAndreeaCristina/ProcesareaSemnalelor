@@ -39,30 +39,30 @@ plt.savefig("L9_2a.png", format="png", bbox_inches="tight")
 plt.legend()
 plt.grid()
 plt.show()
-#
-# alpha_values = np.linspace(0, 1, 1000)
-# errors = np.zeros(1000)
-# optimal_alpha = -1
-# min_error = 10000000
-# for i in range(1000):
-#     new_signal = np.zeros(N)
-#     for t in range(N):
-#         new_value = 0
-#         for j in range(t):
-#             new_value += (1 - alpha_values[i]) ** (t - j) * signal[j]
-#         new_signal[t] = alpha_values[i] * new_value + (1 - alpha_values[i]) ** t * signal[0]
-#     errors[i] = np.mean(np.abs(signal - new_signal) ** 2)
-#     print(i)
-#     if errors[i] < min_error:
-#         min_error = errors[i]
-#         optimal_alpha = alpha_values[i]
-#
-# print("Optimal alpha: ", optimal_alpha)
-# plt.plot(alpha_values, errors)
-# plt.grid()
-# plt.savefig("L9_2b.pdf", format="pdf", bbox_inches="tight")
-# plt.savefig("L9_2b.png", format="png", bbox_inches="tight")
-# plt.show()
+
+alpha_values = np.linspace(0, 1, 1000)
+errors = np.zeros(1000)
+optimal_alpha = -1
+min_error = 10000000
+for i in range(1000):
+    new_signal = np.zeros(N)
+    for t in range(N):
+        new_value = 0
+        for j in range(t):
+            new_value += (1 - alpha_values[i]) ** (t - j) * signal[j]
+        new_signal[t] = alpha_values[i] * new_value + (1 - alpha_values[i]) ** t * signal[0]
+    errors[i] = np.mean(np.abs(signal - new_signal) ** 2)
+    print(i)
+    if errors[i] < min_error:
+        min_error = errors[i]
+        optimal_alpha = alpha_values[i]
+
+print("Optimal alpha: ", optimal_alpha)
+plt.plot(alpha_values, errors)
+plt.grid()
+plt.savefig("L9_2b.pdf", format="pdf", bbox_inches="tight")
+plt.savefig("L9_2b.png", format="png", bbox_inches="tight")
+plt.show()
 
 # 3
 mean = 0
